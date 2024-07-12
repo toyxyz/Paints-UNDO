@@ -1,3 +1,16 @@
+I slightly modified the script to allow users to upload keyframe images directly,
+
+Pay attention to the name of the image file you upload. The video will be generated from the largest number to the smallest number. 
+
+![image](https://github.com/user-attachments/assets/791e44e6-9ba1-4b72-962d-a38874db5f5f)
+
+
+https://github.com/user-attachments/assets/978f5d7f-4316-4eef-be3c-f7b1a36e00af
+
+
+
+---------------------------------------------------------------------------------------------------
+
 # Paints-Undo
 
 PaintsUndo: A Base Model of Drawing Behaviors in Digital Paintings
