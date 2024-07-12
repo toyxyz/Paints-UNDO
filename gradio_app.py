@@ -269,9 +269,6 @@ with block:
     with gr.Accordion(label='Step 3: Generate All Videos', open=True):
         with gr.Row():
             with gr.Column():
-                # Note that, at "Step 3: Generate All Videos", using "1girl, masterpiece, best quality"
-                # or "1boy, masterpiece, best quality" or just "masterpiece, best quality" leads to better results.
-                # Do NOT modify this to use the prompts generated from Step 1 !!
                 i2v_input_text = gr.Text(label='Prompts', value='1girl, masterpiece, best quality')
                 i2v_seed = gr.Slider(label='Stage 2 Seed', minimum=0, maximum=50000, step=1, value=123)
                 i2v_cfg_scale = gr.Slider(minimum=1.0, maximum=15.0, step=0.5, label='CFG Scale', value=7.5,
@@ -285,6 +282,27 @@ with block:
                                             show_share_button=True, height=512)
         with gr.Row():
             i2v_output_images = gr.Gallery(height=512, label="Output Frames", object_fit="contain", columns=8)
+            
+    with gr.Accordion(label='Step 3_2: Generate All Videos(Upload frames)', open=True):
+        with gr.Row():
+            with gr.Column():
+                upload_gallery = gr.Gallery(
+                    label="Generated images", show_label=False, elem_id="gallery", columns=[3], rows=[1], object_fit="contain", height="auto")
+            
+            with gr.Column():
+                i2v_input_text_upload = gr.Text(label='Prompts', value='1girl, masterpiece, best quality')
+                i2v_seed_upload = gr.Slider(label='Stage 2 Seed', minimum=0, maximum=50000, step=1, value=123)
+                i2v_cfg_scale_upload = gr.Slider(minimum=1.0, maximum=15.0, step=0.5, label='CFG Scale', value=7.5,
+                                          elem_id="i2v_cfg_scale")
+                i2v_steps_upload = gr.Slider(minimum=1, maximum=60, step=1, elem_id="i2v_steps",
+                                      label="Sampling steps", value=50)
+                i2v_fps_upload = gr.Slider(minimum=1, maximum=30, step=1, elem_id="i2v_motion", label="FPS", value=4)
+            with gr.Column():
+                i2v_end_btn_upload = gr.Button("Generate Video", interactive=True)
+                i2v_output_video_upload = gr.Video(label="Generated Video", elem_id="output_vid", autoplay=True,
+                                            show_share_button=True, height=512)
+        with gr.Row():
+            i2v_output_images_upload = gr.Gallery(height=512, label="Output Frames", object_fit="contain", columns=8)
 
     input_fg.change(lambda: ["", gr.update(interactive=True), gr.update(interactive=False), gr.update(interactive=False)],
                     outputs=[prompt, prompt_gen_button, key_gen_button, i2v_end_btn])
@@ -306,6 +324,12 @@ with block:
     i2v_end_btn.click(
         inputs=[result_gallery, i2v_input_text, i2v_steps, i2v_cfg_scale, i2v_fps, i2v_seed],
         outputs=[i2v_output_video, i2v_output_images],
+        fn=process_video
+    )
+    
+    i2v_end_btn_upload.click(
+        inputs=[upload_gallery, i2v_input_text_upload, i2v_steps_upload, i2v_cfg_scale_upload, i2v_fps_upload, i2v_seed_upload],
+        outputs=[i2v_output_video_upload, i2v_output_images_upload],
         fn=process_video
     )
 
